@@ -1,0 +1,22 @@
+Core ESC/POS commands
+Function	ESC/POS bytes	What it does	Example Python
+Initialize	ESC @	Reset printer to default state	b"\x1b@"
+Text	—	Print text	"Hello".encode("cp437")
+Line feed	LF	Advance one line	b"\x0a"
+Feed N lines	LF × N	Advance multiple lines	b"\x0a" * 6
+Bold on	ESC E 1	Enable bold	b"\x1b\x45\x01"
+Bold off	ESC E 0	Disable bold	b"\x1b\x45\x00"
+Underline on	ESC - 1	Enable underline	b"\x1b\x2d\x01"
+Underline off	ESC - 0	Disable underline	b"\x1b\x2d\x00"
+Align left	ESC a 0	Left alignment	b"\x1b\x61\x00"
+Align centre	ESC a 1	Centre alignment	b"\x1b\x61\x01"
+Align right	ESC a 2	Right alignment	b"\x1b\x61\x02"
+Double height	ESC ! 16	Double text height	b"\x1b\x21\x10"
+Double width	ESC ! 32	Double text width	b"\x1b\x21\x20"
+Double size	ESC ! 48	Double width + height	b"\x1b\x21\x30"
+Normal size	ESC ! 0	Return to normal text	b"\x1b\x21\x00"
+Reverse on	GS B 1	White text on black	b"\x1d\x42\x01"
+Reverse off	GS B 0	Normal text	b"\x1d\x42\x00"
+Cut	GS V 0	Full cut	b"\x1d\x56\x00"
+Partial cut	GS V 1	Partial cut	b"\x1d\x56\x01"
+Open cash drawer	ESC p...	Trigger drawer pulse	b"\x1b\x70\x00\x19\xff"

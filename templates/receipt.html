@@ -1,0 +1,208 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<title>{{ task.title }}</title>
+<style>
+  /* Authored in printer dots: 1 CSS px == 1 dot at 203 dpi.
+     Thermal rules of thumb baked in below:
+       - pure #000 on #fff only; greys dither into mush
+       - no rule thinner than 2px, or it drops out entirely
+       - monospace and bold, because thin stems bleed at this resolution */
+  * { margin: 0; padding: 0; box-sizing: border-box; }
+
+  html, body {
+    background: #fff;
+    color: #000;
+    -webkit-font-smoothing: none;
+    font-smooth: never;
+    text-rendering: geometricPrecision;
+  }
+
+  .receipt {
+    width: 576px;
+    background: #fff;
+    padding: 16px 20px 12px;
+    font-family: "Courier New", Courier, monospace;
+    font-size: 23px;
+    line-height: 1.32;
+    font-weight: 700;
+    letter-spacing: -0.2px;
+  }
+
+  /* --- structure ------------------------------------------------------- */
+  .rule      { margin: 10px 0; border-top: 3px dashed #000; }
+  .rule--solid { border-top: 4px solid #000; border-style: solid; }
+  .stars     { white-space: nowrap; overflow: hidden; font-size: 22px; letter-spacing: 1px; }
+  .center    { text-align: center; }
+  .upper     { text-transform: uppercase; }
+
+  /* --- masthead -------------------------------------------------------- */
+  .masthead      { text-align: center; margin: 6px 0 4px; }
+  .masthead h1   { font-size: 40px; line-height: 1.1; letter-spacing: 2px; }
+  .masthead .sub { font-size: 20px; letter-spacing: 3px; margin-top: 2px; }
+
+  .meta-row {
+    display: flex;
+    justify-content: space-between;
+    font-size: 20px;
+    margin-top: 6px;
+  }
+
+  /* --- the task itself ------------------------------------------------- */
+  .task { display: flex; gap: 14px; align-items: flex-start; margin: 4px 0; }
+
+  .checkbox {
+    flex: 0 0 auto;
+    width: 38px;
+    height: 38px;
+    border: 4px solid #000;
+    margin-top: 4px;
+  }
+
+  .task h2 {
+    font-size: 31px;
+    line-height: 1.22;
+    letter-spacing: -0.5px;
+    /* Long single words (URLs, IDs) must break rather than run off the paper. */
+    overflow-wrap: anywhere;
+  }
+
+  /* --- label / value pairs --------------------------------------------- */
+  .field      { display: flex; font-size: 22px; margin: 3px 0; }
+  .field dt   { flex: 0 0 150px; letter-spacing: 1px; }
+  .field dd   { flex: 1; overflow-wrap: anywhere; }
+
+  /* Reverse video: the printer renders white-on-black reliably, and it is the
+     only emphasis louder than bold. */
+  .invert {
+    background: #000;
+    color: #fff;
+    padding: 1px 8px;
+    display: inline-block;
+  }
+
+  .banner {
+    background: #000;
+    color: #fff;
+    text-align: center;
+    font-size: 27px;
+    letter-spacing: 4px;
+    padding: 7px 0;
+    margin: 10px 0;
+  }
+
+  /* --- blocks ---------------------------------------------------------- */
+  .block            { margin: 8px 0 4px; }
+  .block__label     { font-size: 20px; letter-spacing: 3px; margin-bottom: 4px; }
+  .block__body      { font-size: 22px; white-space: pre-wrap; overflow-wrap: anywhere; }
+
+  .subtasks         { list-style: none; font-size: 22px; }
+  .subtasks li      { display: flex; gap: 10px; align-items: flex-start; margin: 5px 0; }
+  .subtasks .box    { flex: 0 0 auto; width: 22px; height: 22px; border: 3px solid #000; margin-top: 3px; }
+  .subtasks .text   { flex: 1; overflow-wrap: anywhere; }
+
+  .tags span        { margin-right: 12px; white-space: nowrap; }
+
+  /* --- footer ---------------------------------------------------------- */
+  .footer           { text-align: center; font-size: 20px; letter-spacing: 1px; margin-top: 8px; }
+  .footer .shout    { font-size: 23px; letter-spacing: 2px; margin-top: 4px; }
+</style>
+</head>
+<body>
+  <div class="receipt">
+
+    <div class="stars">****************************************************************</div>
+
+    <div class="masthead">
+      <h1>{{ heading }}</h1>
+      <div class="sub">{{ subheading }}</div>
+    </div>
+
+    <div class="stars">****************************************************************</div>
+
+    <div class="meta-row">
+      <span>NO. {{ receipt_no }}</span>
+      <span>{{ task.created_text }}</span>
+    </div>
+
+    {% if task.project %}
+    <div class="rule"></div>
+    <dl class="field"><dt>PROJECT</dt><dd class="upper">{{ task.project }}</dd></dl>
+    {% endif %}
+
+    <div class="rule rule--solid"></div>
+
+    <div class="task">
+      <div class="checkbox"></div>
+      <h2>{{ task.title }}</h2>
+    </div>
+
+    <div class="rule rule--solid"></div>
+
+    {% if task.is_overdue %}
+    <div class="banner">*** OVERDUE ***</div>
+    {% endif %}
+
+    {% if task.due_text %}
+    <dl class="field"><dt>DUE</dt><dd>{{ task.due_text }}</dd></dl>
+    {% endif %}
+
+    <dl class="field">
+      <dt>PRIORITY</dt>
+      <dd>
+        {%- if task.priority in ("high", "urgent") %}
+        <span class="invert">{{ task.priority|upper }}</span>
+        {%- else %}
+        {{ task.priority|upper }}
+        {%- endif %}
+      </dd>
+    </dl>
+
+    {% if task.assignee %}
+    <dl class="field"><dt>FOR</dt><dd>{{ task.assignee }}</dd></dl>
+    {% endif %}
+
+    {% if task.ticket %}
+    <dl class="field"><dt>REF</dt><dd>{{ task.ticket }}</dd></dl>
+    {% endif %}
+
+    {% if task.tags %}
+    <dl class="field tags">
+      <dt>TAGS</dt>
+      <dd>{% for tag in task.tags %}<span>#{{ tag }}</span>{% endfor %}</dd>
+    </dl>
+    {% endif %}
+
+    {% if task.notes %}
+    <div class="rule"></div>
+    <div class="block">
+      <div class="block__label">NOTES</div>
+      <div class="block__body">{{ task.notes }}</div>
+    </div>
+    {% endif %}
+
+    {% if task.subtasks %}
+    <div class="rule"></div>
+    <div class="block">
+      <div class="block__label">CHECKLIST</div>
+      <ul class="subtasks">
+        {% for item in task.subtasks %}
+        <li><span class="box"></span><span class="text">{{ item }}</span></li>
+        {% endfor %}
+      </ul>
+    </div>
+    {% endif %}
+
+    <div class="rule rule--solid"></div>
+
+    <div class="footer">
+      <div>{{ footer_note }}</div>
+      <div class="shout">{{ footer_shout }}</div>
+    </div>
+
+    <div class="stars">****************************************************************</div>
+
+  </div>
+</body>
+</html>
