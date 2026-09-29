@@ -1,0 +1,44 @@
+<html lang="en">
+    <head>
+        <meta charset="utf-8">
+        <title>ToDo</title>
+        <link rel="stylesheet" href="styles.css">
+        <script src="script.js"></script>
+</head>
+    <body>
+        <div class="create-task">
+
+            <label>Category: 
+                <!-- Replace with stored projects / categories -->
+                <select id="category">
+                    <option>General</option>
+                    <option>Cleaning</option>
+                </select>
+            </label>   
+
+            <div class="form-spacer"></div>
+
+            <label>Task name: 
+                <input id="task-name"></input>
+            </label>
+
+            <div class="form-spacer"></div>
+
+            <label>Description:
+                <input id="task-description"></input>
+            </label>
+
+            <div class="form-spacer"></div>
+
+            <label>
+                <input type="date" id="due-date"></input>
+            </label>
+
+            <div class="form-spacer"></div>
+
+            <button onclick="addTask()">Add</button>
+        </div>
+
+        <div class="recent-tasks"></div>
+    </body>
+</html>
