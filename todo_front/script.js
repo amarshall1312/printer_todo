@@ -64,3 +64,4 @@ function getToday() {
 
     return formattedDate;
 }
+

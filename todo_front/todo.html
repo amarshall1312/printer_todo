@@ -4,6 +4,7 @@
         <title>ToDo</title>
         <link rel="stylesheet" href="styles.css">
         <script src="script.js"></script>
+        <script src="load_data.js"></script>
 </head>
     <body>
         <div class="create-task">
@@ -11,10 +12,23 @@
             <label>Category: 
                 <!-- Replace with stored projects / categories -->
                 <select id="category">
-                    <option>General</option>
-                    <option>Cleaning</option>
                 </select>
             </label>   
+
+            <div class="form-spacer"></div>
+
+            <label>Sub-Category:
+                <!-- Replace with stored projects / categories -->
+                <select id="subcategory">
+                </select>
+            </label>
+
+            <div class="form-spacer"></div>
+
+            <label>Project:
+                <select id="project">
+                </select>
+            </label>
 
             <div class="form-spacer"></div>
 
@@ -30,8 +44,24 @@
 
             <div class="form-spacer"></div>
 
-            <label>
+            <label>Priority:
+                <select id="priority">
+                    <option>Low</option>
+                    <option>Medium</option>
+                    <option>High</option>
+                </select>
+            </label>
+
+            <div class="form-spacer"></div>
+
+            <label>Due:
                 <input type="date" id="due-date"></input>
+            </label>
+
+            <div class="form-spacer"></div>
+
+            <label>Notes:
+                <input id="notes"></input>
             </label>
 
             <div class="form-spacer"></div>
