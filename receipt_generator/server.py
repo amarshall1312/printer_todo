@@ -50,6 +50,18 @@ def get_subcategories(category_id):
     )
     return cursor.fetchall()
 
+@app.get("/projects")
+def get_projects():
+    db = get_db()
+    cursor = db.execute(
+        """
+        SELECT project_id, name
+        FROM project
+        ORDER BY name
+        """
+    )
+    return cursor.fetchall()
+
 @app.post("/request")
 def handle_request(data: dict):
     run_pipeline(data)
