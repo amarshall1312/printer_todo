@@ -1,7 +1,7 @@
 const API_URL = `http://${window.location.hostname}:8000`;
 
 
-function printTask(category, title, date) {
+function printTask(category, title, today, due, notes, priority, subcategory, project) {
     fetch(`${API_URL}/request`, {
         method: "POST",
         headers: {
@@ -9,21 +9,18 @@ function printTask(category, title, date) {
         },
         body: JSON.stringify({
             heading: category,
-            subheading: "ACTION REQUIRED",
+            subheading: subcategory,
             receipt_no: "000123",
             footer_note: "KEEP THIS RECEIPT",
             footer_shout: "GET IT DONE",
             task: {
                 title: title,
-                created_text: date,
-                priority: "high",
-                project: "Operations",
+                created_text: today,
+                priority: priority,
+                project: project,
                 is_overdue: false,
-                due_text: "25 SEP 2026",
-                assignee: "Mojito",
-                ticket: "OPS-42",
-                tags: ["printer", "office"],
-                notes: "Use the 80 mm thermal roll.",
+                due_text: due,
+                notes: notes,
                 subtasks: ["Order paper", "Install roll", "Print test receipt"],
             },
         })
@@ -31,15 +28,20 @@ function printTask(category, title, date) {
 }
 
 function addTask() {
-    let category = document.getElementById("category").value;
-    let subcategory = document.getElementById("subcategory").value;
+    let category = document.getElementById("category");
+    category = category.options[category.selectedIndex]?.text;    
+    let subcategory = document.getElementById("subcategory");
+    subcategory = subcategory.options[subcategory.selectedIndex]?.text;
+    let project = document.getElementById("project");
+    project = project.options[project.selectedIndex]?.text;
     let title = document.getElementById("task-name").value;
     let today = getToday()
     let due = getDate(document.getElementById("due-date").value);
     let notes = document.getElementById("notes").value;
+    let priority = document.getElementById("priority").value;
 
     // need to update this signature / endpoint
-    printTask(category, title, today, subcategory);
+    printTask(category, title, today, due, notes, priority, subcategory, project);
 }
 
 function getDate(value) {

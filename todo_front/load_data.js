@@ -50,6 +50,28 @@ async function loadSubcategories(categoryId) {
 
 }
 
+async function loadProjects() {
+    const response = await fetch(`${API_URLdata}/projects`);
+
+    if (!response.ok) {
+        throw new Error("Failed to load projects");
+    }
+
+    const projects = await response.json();
+
+    const dropdown = document.getElementById("project");
+    console.log("getting projects")
+    projects.forEach(project => {
+        const option = document.createElement("option");
+
+        option.value = project.project_id;
+        option.textContent = project.name;
+
+        dropdown.appendChild(option);
+    });
+
+}
+
 document.addEventListener("DOMContentLoaded", () => {
     const categoryDropdown = document.getElementById("category");
 
@@ -58,4 +80,6 @@ document.addEventListener("DOMContentLoaded", () => {
     });
 
     loadCategories();
+    loadProjects();
+
 });

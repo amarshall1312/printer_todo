@@ -1,3 +1,58 @@
+.create-task {
+    box-sizing: border-box;
+    width: min(100% - 32px, 520px);
+    margin: 40px auto;
+    padding: 28px;
+    background: #ffffff;
+    border: 1px solid #d9e0e5;
+    border-radius: 8px;
+    box-shadow: 0 8px 24px rgb(25 45 55 / 8%);
+    color: #26343b;
+    font-family: Arial, sans-serif;
+}
+
+.create-task label {
+    display: flex;
+    flex-direction: column;
+    gap: 7px;
+    font-weight: 600;
+}
+
+.create-task input,
+.create-task select {
+    box-sizing: border-box;
+    width: 100%;
+    min-height: 40px;
+    padding: 8px 10px;
+    border: 1px solid #bdc9cf;
+    border-radius: 4px;
+    background: #fff;
+    color: inherit;
+    font: inherit;
+}
+
+.create-task input:focus,
+.create-task select:focus {
+    border-color: #287a70;
+    outline: 2px solid rgb(40 122 112 / 20%);
+}
+
+.create-task button {
+    min-height: 40px;
+    padding: 8px 18px;
+    border: 0;
+    border-radius: 4px;
+    background: #287a70;
+    color: #fff;
+    font: inherit;
+    font-weight: 600;
+    cursor: pointer;
+}
+
+.create-task button:hover {
+    background: #20645c;
+}
+
 .form-spacer {
     height: 15px;
 }
