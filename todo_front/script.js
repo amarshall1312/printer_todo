@@ -44,6 +44,11 @@ function addTask() {
     printTask(category, title, today, due, notes, priority, subcategory, project);
 }
 
+function addSubTask() {
+    // add text box into subtask div above button, naming subtask(n) based on number - or a group
+    
+}
+
 function getDate(value) {
     if (!value) return "";
 
